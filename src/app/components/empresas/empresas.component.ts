@@ -30,7 +30,6 @@ export class EmpresasComponent implements OnInit {
   RegistrosTotal: number;
   Empresas: Empresas[] = [];
 
-
   Pagina = 1; // inicia pagina 1
 
   // opciones del combo activo
@@ -43,7 +42,6 @@ export class EmpresasComponent implements OnInit {
   FormBusqueda: FormGroup;
   FormRegistro: FormGroup;
   submitted = false;
-
 
   constructor(
     public formBuilder: FormBuilder,
@@ -64,7 +62,10 @@ export class EmpresasComponent implements OnInit {
         '',
         [Validators.required, Validators.minLength(1), Validators.maxLength(50)]
       ],
-      CantidadEmpleados: [null, [Validators.required, Validators.pattern('[0-9]{1,7}')]],
+      CantidadEmpleados: [
+        null,
+        [Validators.required, Validators.pattern('[0-9]{1,7}')]
+      ],
       FechaFundacion: [
         '',
         [
@@ -163,10 +164,8 @@ export class EmpresasComponent implements OnInit {
       ).toISOString();
 
     // agregar post
-    if (this.AccionABMC == "A") {
-      this.empresasService
-      .post(itemCopy)
-      .subscribe((res: any) => {
+    if (this.AccionABMC == 'A') {
+      this.empresasService.post(itemCopy).subscribe((res: any) => {
         this.Volver();
         this.modalDialogService.Alert('Registro agregado correctamente.');
         this.Buscar();
@@ -207,10 +206,5 @@ export class EmpresasComponent implements OnInit {
 
   ImprimirListado() {
     this.modalDialogService.Alert('Sin desarrollar...');
-  }
-
-  GetArticuloFamiliaNombre(Id) {
-    var Nombre = this.Empresas.find(x => x.IdEmpresa === Id)?.RazonSocial;
-    return Nombre;
   }
 }
