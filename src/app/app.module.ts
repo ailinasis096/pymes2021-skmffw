@@ -46,10 +46,8 @@ import { EmpresasComponent } from './components/empresas/empresas.component';
         { path: 'inicio', component: InicioComponent },
         { path: 'articulos', component: ArticulosComponent },
         { path: 'articulosfamilias', component: ArticulosFamiliasComponent },
-        //{ path: 'clientes', component: ClientesComponent },
         { path: 'ventas', component: VentasComponent },
         { path: 'ventasconsultas', component: VentasConsultasComponent },
-        //Ref Angular LazyLoad #1  https://angular.io/guide/lazy-loading-ngmodules
         {
           path: 'clientes',
           loadChildren: () =>

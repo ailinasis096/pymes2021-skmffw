@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ArticuloFamilia } from '../../models/articulo-familia';
-import { ArticulosService } from '../../services/articulos.service';
-import { ArticulosFamiliasService } from '../../services/articulos-familias.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDialogService } from '../../services/modal-dialog.service';
 import { Empresas } from '../../models/empresas';
