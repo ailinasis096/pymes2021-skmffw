@@ -12,14 +12,8 @@ export class EmpresasService {
     this.resourceUrl = environment.ConexionWebApiProxy + 'empresas/';
   }
 
-  get(RazonSocial: string, Activo: boolean, Pagina: number) {
+  get(Pagina: number) {
     let params = new HttpParams();
-    if (RazonSocial != null) {
-      params = params.append('RazonSocial', RazonSocial);
-    }
-    if (Activo != null) {
-      params = params.append('Activo', Activo.toString());
-    }
     params = params.append('Pagina', Pagina.toString());
 
     return this.httpClient.get(this.resourceUrl, { params: params });
