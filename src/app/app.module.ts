@@ -30,9 +30,8 @@ import { MyInterceptor } from './shared/my-interceptor';
 import { DatePickerAdapterISO } from './shared/DatePickerAdapterISO';
 import { DatePickerParserFormatter } from './shared/DatePickerParserFormater';
 import { DatePickerSpanish } from './shared/DatePickerSpanish';
-import { FormFocusDirective } from './shared/form-focus.directive';
+
 import { EmpresasComponent } from './components/empresas/empresas.component';
-import { EmpresasService } from './services/empresas.service';
 
 @NgModule({
   imports: [
