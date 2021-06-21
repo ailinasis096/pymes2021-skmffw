@@ -29,30 +29,16 @@ export class EmpresasComponent implements OnInit {
 
   Pagina = 1; // inicia pagina 1
 
-  // opciones del combo activo
-  OpcionesActivo = [
-    { Id: null, Nombre: '' },
-    { Id: true, Nombre: 'SI' },
-    { Id: false, Nombre: 'NO' }
-  ];
-
-  FormBusqueda: FormGroup;
   FormRegistro: FormGroup;
   submitted = false;
 
   constructor(
     public formBuilder: FormBuilder,
-    //private articulosService: MockArticulosService,
-    //private articulosFamiliasService: MockArticulosFamiliasService,
     private empresasService: EmpresasService,
     private modalDialogService: ModalDialogService
   ) {}
 
   ngOnInit() {
-    this.FormBusqueda = this.formBuilder.group({
-      RazonSocial: [''],
-      Activo: [null]
-    });
     this.FormRegistro = this.formBuilder.group({
       IdEmpresa: [0],
       RazonSocial: [
@@ -71,73 +57,13 @@ export class EmpresasComponent implements OnInit {
             '(0[1-9]|[12][0-9]|3[01])[-/](0[1-9]|1[012])[-/](19|20)[0-9]{2}'
           )
         ]
-      ],
-      Activo: [true]
-    });
-
-    this.GetEmpresas();
-  }
-
-  GetEmpresas() {
-    this.empresasService.get(this.Pagina).subscribe((res: Empresas[]) => {
-      this.Empresas = res;
+      ]
     });
   }
-
   Agregar() {
     this.AccionABMC = 'A';
-    this.FormRegistro.reset({ Activo: true, IdArticulo: 0 });
+    this.FormRegistro.reset({ IdEmpresa: 0 });
     this.submitted = false;
-    //this.FormRegistro.markAsPristine();  // incluido en el reset
-    //this.FormRegistro.markAsUntouched(); // incluido en el reset
-  }
-
-  // Buscar segun los filtros, establecidos en FormRegistro
-  Buscar() {
-    this.empresasService
-      .get(
-        this.FormBusqueda.value.RazonSocial,
-        this.FormBusqueda.value.Activo,
-        this.Pagina
-      )
-      .subscribe((res: any) => {
-        this.Items = res.Items;
-        this.RegistrosTotal = res.RegistrosTotal;
-      });
-  }
-
-  // Obtengo un registro especifico según el Id
-  BuscarPorId(Dto, AccionABMC) {
-    window.scroll(0, 0); // ir al incio del scroll
-
-    this.empresasService.getById(Dto.IdEmpresa).subscribe((res: any) => {
-      this.FormRegistro.patchValue(res);
-
-      //formatear fecha de  ISO 8061 a string dd/MM/yyyy
-      var arrFecha = res.FechaFundacion.substr(0, 10).split('-');
-      this.FormRegistro.controls.FechaFundacion.patchValue(
-        arrFecha[2] + '/' + arrFecha[1] + '/' + arrFecha[0]
-      );
-
-      this.AccionABMC = AccionABMC;
-    });
-  }
-
-  Consultar(Dto) {
-    this.BuscarPorId(Dto, 'C');
-  }
-
-  // comienza la modificacion, luego la confirma con el metodo Grabar
-  Modificar(Dto) {
-    if (!Dto.Activo) {
-      this.modalDialogService.Alert(
-        'No puede modificarse un registro Inactivo.'
-      );
-      return;
-    }
-    this.submitted = false;
-    this.FormRegistro.markAsUntouched();
-    this.BuscarPorId(Dto, 'M');
   }
 
   // grabar tanto altas como modificaciones
@@ -152,9 +78,9 @@ export class EmpresasComponent implements OnInit {
     const itemCopy = { ...this.FormRegistro.value };
 
     //convertir fecha de string dd/MM/yyyy a ISO para que la entienda webapi
-    var arrFecha = itemCopy.FechaAlta.substr(0, 10).split('/');
+    var arrFecha = itemCopy.FechaFundacion.substr(0, 10).split('/');
     if (arrFecha.length == 3)
-      itemCopy.FechaAlta = new Date(
+      itemCopy.FechaFundacion = new Date(
         arrFecha[2],
         arrFecha[1] - 1,
         arrFecha[0]
@@ -167,41 +93,17 @@ export class EmpresasComponent implements OnInit {
         this.modalDialogService.Alert('Registro agregado correctamente.');
         this.Buscar();
       });
-    } else {
-      // modificar put
-      this.empresasService
-        .put(itemCopy.IdEmpresa, itemCopy)
-        .subscribe((res: any) => {
-          this.Volver();
-          this.modalDialogService.Alert('Registro modificado correctamente.');
-          this.Buscar();
-        });
     }
   }
-
-  // representa la baja logica
-  ActivarDesactivar(Dto) {
-    this.modalDialogService.Confirm(
-      'Esta seguro de ' +
-        (Dto.Activo ? 'desactivar' : 'activar') +
-        ' este registro?',
-      undefined,
-      undefined,
-      undefined,
-      () =>
-        this.empresasService
-          .delete(Dto.IdEmpresa)
-          .subscribe((res: any) => this.Buscar()),
-      null
-    );
+  // Buscar segun los filtros, establecidos en FormRegistro
+  Buscar() {
+    this.empresasService.get().subscribe((res: any) => {
+      this.Items = res;
+    });
   }
 
   // Volver/Cancelar desde Agregar/Modificar/Consultar
   Volver() {
     this.AccionABMC = 'L';
-  }
-
-  ImprimirListado() {
-    this.modalDialogService.Alert('Sin desarrollar...');
   }
 }

@@ -12,26 +12,11 @@ export class EmpresasService {
     this.resourceUrl = environment.ConexionWebApiProxy + 'empresas/';
   }
 
-  get(Pagina: number) {
-    let params = new HttpParams();
-    params = params.append('Pagina', Pagina.toString());
-
-    return this.httpClient.get(this.resourceUrl, { params: params });
-  }
-
-  getById(Id: number) {
-    return this.httpClient.get(this.resourceUrl + Id);
+  get() {
+    return this.httpClient.get(this.resourceUrl);
   }
 
   post(obj: Empresas) {
     return this.httpClient.post(this.resourceUrl, obj);
-  }
-
-  put(Id: number, obj: Empresas) {
-    return this.httpClient.put(this.resourceUrl + Id, obj);
-  }
-
-  delete(Id) {
-    return this.httpClient.delete(this.resourceUrl + Id);
   }
 }

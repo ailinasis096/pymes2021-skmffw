@@ -33,6 +33,7 @@ export class ArticulosComponent implements OnInit {
   Familias: ArticuloFamilia[] = [];
 
 
+
   Pagina = 1; // inicia pagina 1
 
   // opciones del combo activo
